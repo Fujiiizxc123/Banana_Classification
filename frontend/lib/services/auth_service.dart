@@ -23,21 +23,14 @@ class AuthService {
 
   // Register
   Future<Map<String, dynamic>> register(
-    String name,
-    String email,
-    String password,
-  ) async {
+      String name, String email, String password) async {
     final response = await http.post(
       Uri.parse(ApiConstants.register),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'ngrok-skip-browser-warning': 'true',
-      },
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
       body: jsonEncode({
-        'name': name,
-        'email': email,
-        'password': password,
+        'name':                  name,
+        'email':                 email,
+        'password':              password,
         'password_confirmation': password,
       }),
     );
@@ -48,10 +41,7 @@ class AuthService {
       await saveToken(data['token']);
       return {'success': true, 'user': UserModel.fromJson(data['user'])};
     } else {
-      return {
-        'success': false,
-        'message': data['message'] ?? 'Registration failed',
-      };
+      return {'success': false, 'message': data['message'] ?? 'Registration failed'};
     }
   }
 
@@ -59,10 +49,7 @@ class AuthService {
   Future<Map<String, dynamic>> login(String email, String password) async {
     final response = await http.post(
       Uri.parse(ApiConstants.login),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}),
     );
 
@@ -82,8 +69,8 @@ class AuthService {
     final response = await http.post(
       Uri.parse(ApiConstants.logout),
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        'Content-Type':  'application/json',
+        'Accept':        'application/json',
         'Authorization': 'Bearer $token',
       },
     );
@@ -100,7 +87,10 @@ class AuthService {
     final token = await getToken();
     final response = await http.get(
       Uri.parse(ApiConstants.history),
-      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+      headers: {
+        'Accept':        'application/json',
+        'Authorization': 'Bearer $token',
+      },
     );
 
     if (response.statusCode == 200) {
